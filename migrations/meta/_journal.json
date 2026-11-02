@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788082168326,
+      "tag": "0000_cooing_dragon_lord",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789739850484,
+      "tag": "0001_woozy_shape",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790176981422,
+      "tag": "0002_shiny_scarlet_witch",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "ayursutra",
+  "version": "1.0.0",
+  "description": "AYURSUTRA - Panchakarma Patient Management and Therapy Scheduling Software",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "db:generate": "npm run db:generate --prefix server",
+    "db:migrate": "npm run db:migrate --prefix server",
+    "db:seed": "npm run db:seed --prefix server",
+    "db:reset": "npm run db:reset --prefix server",
+    "test": "npm run test --prefix server",
+    "build": "npm run build --prefix server && npm run build --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run dev:server\" \"npm run dev:client\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "ayurveda",
+    "panchakarma",
+    "healthcare",
+    "scheduling",
+    "therapy-management",
+    "sqlite",
+    "drizzle-orm",
+    "react",
+    "express"
+  ],
+  "author": "AyurSutra Team",
+  "license": "MIT"
+}

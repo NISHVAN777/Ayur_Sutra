@@ -310,3 +310,53 @@ export interface DashboardStats {
   availableRoomsCount: number;
   totalCompletedSessions: number;
 }
+
+// Hackathon Task 1: daily wellness log
+export type AgniStatus = "SAMA" | "VISHAMA" | "TIKSHNA" | "MANDA";
+export type BowelStatus = "NORMAL" | "CONSTIPATED" | "LOOSE";
+
+export interface WellnessGuidance {
+  source: "gemini" | "rule-based";
+  summary: string;
+  preTreatment: string[];
+  postTreatment: string[];
+  alerts: string[];
+}
+
+export interface WellnessLog {
+  id: string;
+  patientId: string;
+  courseId: string | null;
+  dayNumber: number | null;
+  logDate: string;
+  breakfast: string | null;
+  lunch: string | null;
+  dinner: string | null;
+  agniStatus: AgniStatus;
+  bowelStatus: BowelStatus;
+  reactions: string[];
+  energyLevel: number;
+  discomfortLevel: number;
+  notes: string | null;
+  guidance: WellnessGuidance | null;
+  createdAt: string;
+}
+
+// Hackathon Task 2: disruption rescheduling
+export interface DisruptionPlanItem {
+  sessionId: string;
+  courseId: string;
+  dayNumber: number;
+  procedure: string;
+  phase: string | null;
+  from: { date: string; startTime: string; therapistId: string; therapistName: string; roomId: string; roomName: string };
+  to: { date: string; startTime: string; endTime: string; therapistId: string; therapistName: string; roomId: string; roomName: string } | null;
+  changes: Array<"THERAPIST" | "ROOM" | "TIME" | "DATE">;
+  status: "UNCHANGED" | "REASSIGNED" | "UNRESOLVED";
+}
+
+export interface DisruptionPlan {
+  courses: Array<{ courseId: string; therapyName: string; patientId: string; patientName: string; items: DisruptionPlanItem[] }>;
+  affectedSessions: number;
+  unresolved: number;
+}

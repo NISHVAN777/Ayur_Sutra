@@ -145,6 +145,49 @@ try {
   // Ignored if table is not yet created (e.g. before initial migration)
 }
 
+// Hackathon tables: daily wellness logs and therapist qualifications
+export function ensureHackathonTables() {
+  sqlite.exec(`
+    CREATE TABLE IF NOT EXISTS wellness_logs (
+      id TEXT PRIMARY KEY,
+      patient_id TEXT NOT NULL,
+      course_id TEXT,
+      day_number INTEGER,
+      log_date TEXT NOT NULL,
+      breakfast TEXT,
+      lunch TEXT,
+      dinner TEXT,
+      agni_status TEXT NOT NULL,
+      bowel_status TEXT NOT NULL,
+      reactions TEXT NOT NULL DEFAULT '[]',
+      energy_level INTEGER NOT NULL,
+      discomfort_level INTEGER NOT NULL,
+      notes TEXT,
+      ai_guidance TEXT,
+      created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+      updated_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+      FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
+      FOREIGN KEY (course_id) REFERENCES therapy_courses(id) ON DELETE SET NULL
+    );
+    CREATE UNIQUE INDEX IF NOT EXISTS wellness_patient_date_idx ON wellness_logs(patient_id, log_date);
+
+    CREATE TABLE IF NOT EXISTS therapist_qualifications (
+      id TEXT PRIMARY KEY,
+      therapist_id TEXT NOT NULL,
+      procedure_name TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+      FOREIGN KEY (therapist_id) REFERENCES therapists(id) ON DELETE CASCADE
+    );
+    CREATE UNIQUE INDEX IF NOT EXISTS qual_therapist_proc_idx ON therapist_qualifications(therapist_id, procedure_name);
+  `);
+}
+
+try {
+  ensureHackathonTables();
+} catch (e) {
+  // Ignored before the initial migration has created the referenced tables
+}
+
 export const db = drizzle(sqlite, { schema });
 export { schema };
 export default db;

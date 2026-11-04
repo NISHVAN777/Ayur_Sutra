@@ -187,3 +187,25 @@ export const resumeCourseSchema = z.object({
 export const chatMessageSchema = z.object({
   message: z.string().min(1, "Message cannot be empty"),
 });
+
+// Hackathon Task 1: daily wellness log
+export const wellnessLogSchema = z.object({
+  logDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD").optional(),
+  breakfast: z.string().max(300).optional(),
+  lunch: z.string().max(300).optional(),
+  dinner: z.string().max(300).optional(),
+  agniStatus: z.enum(["SAMA", "VISHAMA", "TIKSHNA", "MANDA"]),
+  bowelStatus: z.enum(["NORMAL", "CONSTIPATED", "LOOSE"]),
+  reactions: z.array(z.string().max(60)).max(12).default([]),
+  energyLevel: z.number().int().min(1).max(5),
+  discomfortLevel: z.number().int().min(0).max(10),
+  notes: z.string().max(1000).optional(),
+});
+
+// Hackathon Task 2: disruption rescheduling
+export const disruptionSchema = z.object({
+  therapistId: z.string().min(1, "Therapist ID is required"),
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Start date must be YYYY-MM-DD"),
+  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "End date must be YYYY-MM-DD"),
+  reason: z.string().min(3, "A reason is required"),
+});

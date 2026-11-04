@@ -11,6 +11,8 @@ export async function resetDatabase() {
   try {
     sqlite.exec(`
       PRAGMA foreign_keys = OFF;
+      DROP TABLE IF EXISTS wellness_logs;
+      DROP TABLE IF EXISTS therapist_qualifications;
       DROP TABLE IF EXISTS reminder_logs;
       DROP TABLE IF EXISTS procedure_room_compatibility;
       DROP TABLE IF EXISTS therapist_leaves;

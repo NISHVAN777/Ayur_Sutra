@@ -1,5 +1,5 @@
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
-import { db, sqlite } from "./index.js";
+import { db, sqlite, ensureHackathonTables } from "./index.js";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -18,6 +18,7 @@ export async function runMigrations() {
 
   try {
     migrate(db, { migrationsFolder });
+    ensureHackathonTables();
     console.log("Database migrations applied successfully.");
   } catch (error) {
     console.error("Failed to run migrations:", error);

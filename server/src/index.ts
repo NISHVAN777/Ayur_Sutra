@@ -13,6 +13,7 @@ import adminRoutes from "./routes/admin.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import requestRoutes from "./routes/request.routes.js";
+import wellnessRoutes from "./routes/wellness.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { ReminderService } from "./services/reminder.service.js";
 import { PatientController } from "./controllers/patient.controller.js";
@@ -74,6 +75,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/requests", requestRoutes);
+app.use("/api/wellness-logs", wellnessRoutes);
 
 // Centralized Error Handling
 app.use(errorHandler);

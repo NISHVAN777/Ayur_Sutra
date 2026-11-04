@@ -20,6 +20,7 @@ import { CourseDetailsPage } from "./pages/admin/CourseDetailsPage";
 import { CalendarPage } from "./pages/admin/CalendarPage";
 import { ReportsPage } from "./pages/admin/ReportsPage";
 import { NotificationsPage } from "./pages/admin/NotificationsPage";
+import { DisruptionReschedulerPage } from "./pages/admin/DisruptionReschedulerPage";
 
 // Therapist Pages
 import { TherapistDashboard } from "./pages/therapist/TherapistDashboard";
@@ -34,6 +35,7 @@ import { PatientSessionsPage } from "./pages/patient/PatientSessionsPage";
 import { PatientHistoryPage } from "./pages/patient/PatientHistoryPage";
 import { PatientNotificationsPage } from "./pages/patient/PatientNotificationsPage";
 import { PatientAIAssistantPage } from "./pages/patient/PatientAIAssistantPage";
+import { WellnessLogPage } from "./pages/patient/WellnessLogPage";
 
 // 404
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -102,6 +104,7 @@ export const App: React.FC = () => {
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="reports" element={<ReportsPage />} />
         <Route path="notifications" element={<NotificationsPage />} />
+        <Route path="disruptions" element={<DisruptionReschedulerPage />} />
       </Route>
 
       {/* Therapist Routes */}
@@ -134,6 +137,7 @@ export const App: React.FC = () => {
         <Route path="history" element={<PatientHistoryPage />} />
         <Route path="notifications" element={<PatientNotificationsPage />} />
         <Route path="ai" element={<PatientAIAssistantPage />} />
+        <Route path="wellness" element={<WellnessLogPage />} />
       </Route>
 
       {/* 404 Route */}

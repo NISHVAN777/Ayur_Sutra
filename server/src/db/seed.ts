@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { db, sqlite } from "./index.js";
+import { db, sqlite, ensureHackathonTables } from "./index.js";
 import { 
   users, patients, therapists, treatmentRooms, 
   therapyCourses, therapySessions, notifications, chatMessages, auditLogs,
@@ -11,7 +11,10 @@ export async function seedDatabase() {
   console.log("Seeding database with standardized Ayurvedic clinic data...");
 
   // Clear existing records
+  ensureHackathonTables();
   sqlite.exec(`
+    DELETE FROM wellness_logs;
+    DELETE FROM therapist_qualifications;
     DELETE FROM reminder_logs;
     DELETE FROM procedure_room_compatibility;
     DELETE FROM therapist_leaves;
@@ -593,6 +596,40 @@ export async function seedDatabase() {
       message: "Hello Arun. During your Basti therapy, your digestive system is undergoing active cleansing. Follow these dietary recommendations:\n- Eat light, warm, freshly cooked meals such as warm rice soup, vegetable broths, or boiled grains with a teaspoon of ghee.\n- Drink warm water throughout the day; avoid cold or iced drinks.\n- Avoid heavy, oily, fried, or processed foods, cold salads, and late-night snacking.\n- Rest well after each session and avoid strenuous physical exertion.\n\nIf you experience any specific discomfort, always consult Dr. Rajesh Kumar directly.",
     }
   ]);
+
+  // Hackathon: therapist qualifications (which procedures each therapist is trained to perform)
+  const QUALIFICATIONS: Record<string, string[]> = {
+    thp_001: ["Basti", "Abhyanga", "Abhyanga & Swedana", "Snehana & Swedana", "Deepana & Pachana", "Samsarjana Krama", "Rasayana", "Swedana & Rest"],
+    thp_002: ["Shirodhara", "Snehana & Swedana", "Abhyanga & Swedana", "Samsarjana Krama", "Rasayana"],
+    thp_003: ["Basti", "Abhyanga", "Abhyanga & Swedana", "Snehana & Swedana", "Deepana & Pachana", "Samsarjana Krama", "Rasayana", "Swedana & Rest", "Nasya"],
+  };
+  const insertQual = sqlite.prepare(`INSERT INTO therapist_qualifications (id, therapist_id, procedure_name) VALUES (?, ?, ?)`);
+  for (const [thpId, procs] of Object.entries(QUALIFICATIONS)) {
+    procs.forEach((proc, i) => insertQual.run(`qual_${thpId}_${i + 1}`, thpId, proc));
+  }
+
+  // Hackathon: sample daily wellness logs for Arun Sharma (Days 1-3 of the Basti course)
+  const insertLog = sqlite.prepare(`
+    INSERT INTO wellness_logs (id, patient_id, course_id, day_number, log_date, breakfast, lunch, dinner,
+      agni_status, bowel_status, reactions, energy_level, discomfort_level, notes, ai_guidance)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+  const sampleLogs = [
+    { day: 1, breakfast: "Rice kanji with a little ghee", lunch: "Moong dal khichdi", dinner: "Vegetable soup", agni: "MANDA", bowel: "CONSTIPATED", reactions: ["Heaviness", "Mild bloating"], energy: 2, discomfort: 4, notes: "Felt heavy after lunch." },
+    { day: 2, breakfast: "Warm poha", lunch: "Khichdi with buttermilk", dinner: "Rice soup", agni: "VISHAMA", bowel: "NORMAL", reactions: ["Mild fatigue"], energy: 3, discomfort: 3, notes: "Appetite was irregular in the evening." },
+    { day: 3, breakfast: "Rice kanji", lunch: "Khichdi with ghee", dinner: "Moong soup", agni: "SAMA", bowel: "NORMAL", reactions: ["Light and relaxed"], energy: 4, discomfort: 1, notes: "Felt much lighter after the session." },
+  ];
+  for (const l of sampleLogs) {
+    const guidance = {
+      source: "rule-based",
+      summary: `Day ${l.day} entry reviewed.`,
+      preTreatment: ["Have a light, warm breakfast at least two hours before your session.", "Sip warm water through the morning."],
+      postTreatment: ["Rest for at least 30 minutes after the session.", "Avoid cold drinks and heavy, fried food for the rest of the day."],
+      alerts: [] as string[],
+    };
+    insertLog.run(`wl_seed_${l.day}`, patient1.id, course1.id, l.day, format(addDays(baseDate1, l.day - 1), "yyyy-MM-dd"),
+      l.breakfast, l.lunch, l.dinner, l.agni, l.bowel, JSON.stringify(l.reactions), l.energy, l.discomfort, l.notes, JSON.stringify(guidance));
+  }
 
   console.log("Database seeded successfully with standardized treatments and suites!");
 }

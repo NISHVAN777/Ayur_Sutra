@@ -16,6 +16,8 @@ import {
   CalendarClock,
   HeartHandshake,
   FilePlus2,
+  CalendarX2,
+  ClipboardList,
 } from "lucide-react";
 
 export const Sidebar: React.FC = () => {
@@ -30,6 +32,7 @@ export const Sidebar: React.FC = () => {
     { label: "Therapy Courses", to: "/admin/courses", icon: Layers, end: true },
     { label: "Schedule Course", to: "/admin/courses/create", icon: FilePlus2 },
     { label: "Master Calendar", to: "/admin/calendar", icon: Calendar },
+    { label: "Disruption Rescheduler", to: "/admin/disruptions", icon: CalendarX2 },
     { label: "Reports & Analytics", to: "/admin/reports", icon: BarChart3 },
     { label: "Notifications", to: "/admin/notifications", icon: Bell },
   ];
@@ -46,6 +49,7 @@ export const Sidebar: React.FC = () => {
     { label: "Care Journey", to: "/patient/journey", icon: HeartHandshake },
     { label: "Upcoming Sessions", to: "/patient/sessions", icon: CalendarClock },
     { label: "Treatment History", to: "/patient/history", icon: History },
+    { label: "Daily Wellness Log", to: "/patient/wellness", icon: ClipboardList },
     { label: "Notifications", to: "/patient/notifications", icon: Bell },
     { label: "Ayurveda AI Guide", to: "/patient/ai", icon: Sparkles },
   ];
